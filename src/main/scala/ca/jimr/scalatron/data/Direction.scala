@@ -16,15 +16,17 @@ case object DownLeft extends Position(-1, 1) with Direction
 case object Left extends Position(-1, 0) with Direction
 
 object Direction {
-  def apply(pos: Position) = pos match {
-    case Position(x, y) if x < 0 && y < 0 => UpLeft
-    case Position(x, y) if x == 0 && y < 0 => Up
-    case Position(x, y) if x > 0 && y < 0 => UpRight
-    case Position(x, y) if x > 0 && y == 0 => Right
-    case Position(x, y) if x > 0 && y > 0 => DownRight
-    case Position(x, y) if x == 0 && y > 0 => Down
-    case Position(x, y) if x < 0 && y > 0 => DownLeft
-    case Position(x, y) if x < 0 && y == 0 => Left
+  def apply(pos: Position) = (pos.x.signum, pos.y.signum) match {
+    case (-1,-1) => UpLeft
+    case (0, -1) => Up
+    case (1, -1) => UpRight
+    case (1, 0) => Right
+    case (1, 1) => DownRight
+    case (0, 1) => Down
+    case (-1, 1) => DownLeft
+    case (-1, 0) => Left
     case _ => throw new IllegalArgumentException("Invalid direction")
   }
+
+  val All = Seq(UpLeft, Up, UpRight, Right, DownRight, Down, DownLeft, Left)
 }
