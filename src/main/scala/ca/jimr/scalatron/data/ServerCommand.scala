@@ -22,7 +22,7 @@ case class ReactCommand(
   slaves: Int,
   master: Option[Direction] = None,
   collision: Option[Direction] = None,
-  props: Map[String,String] = Map()
+  state: Map[String,String] = Map()
 ) extends ServerCommand
 
 case class GoodbyeCommand(energy: Int) extends ServerCommand
@@ -47,13 +47,14 @@ object ServerCommand {
         generation = params("generation").toInt,
         name = params("name"),
         time = params("time").toInt,
-        view = BotView(input = params("view")),
+        view = BotView(params("view")),
         energy = params("energy").toInt,
         slaves = params("slaves").toInt,
         master = params.get("master").map(s => Direction(Position(s))),
         collision = params.get("collision").map(s => Direction(Position(s))),
-        props = params -- Seq("generation", "name", "time", "view", "energy", "slaves", "master", "collision")
+        state = params -- Seq("generation", "name", "time", "view", "energy", "slaves", "master", "collision")
       )
+      case _ => throw new IllegalArgumentException(s"Invalid command: $input")
     }
   }
 }

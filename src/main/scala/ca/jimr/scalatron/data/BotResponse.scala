@@ -6,7 +6,7 @@ package ca.jimr.scalatron.data
  * Multiple responses can be returned, but only one of each type
  */
 
-sealed trait Response {
+sealed trait BotResponse {
   protected def toParamStr(params: Map[String,String])  = {
     params.toSeq.map { case (k, v) => s"$k=$v" }.mkString(",")
   }
@@ -16,7 +16,7 @@ sealed trait Response {
  * Responses that affect server state
  */
 
-case class MoveResponse(direction: Direction) extends Response {
+case class MoveResponse(direction: Direction) extends BotResponse {
   override def toString = s"Move(direction=$direction)"
 }
 
@@ -24,22 +24,22 @@ case class SpawnResponse(
   direction: Direction,
   name: Option[String] = None,
   energy: Option[Int] = None,
-  params: Map[String,String] = Map()
-) extends Response {
+  state: Map[String,String] = Map()
+) extends BotResponse {
   override def toString = {
     val paramMap = Map("direction" -> direction.toString) ++
       name.map(n => Map("name" -> n)).getOrElse(Map()) ++
       energy.map(e => Map("energy" -> e.toString)).getOrElse(Map()) ++
-      params
-    s"Spawn(${toParamStr(paramMap)}})"
+      state
+    s"Spawn(${toParamStr(paramMap)})"
   }
 }
 
-case class SetResponse(params: Map[String,String]) extends Response {
-  override def toString = s"Set(${toParamStr(params)})"
+case class SetResponse(state: Map[String,String]) extends BotResponse {
+  override def toString = s"Set(${toParamStr(state)})"
 }
 
-case class ExplodeResponse(size: Int) extends Response {
+case class ExplodeResponse(size: Int) extends BotResponse {
   override def toString = s"Explode(size=$size)"
 }
 
@@ -47,18 +47,18 @@ case class ExplodeResponse(size: Int) extends Response {
  * Responses that do not affect server state
  */
 
-case class SayResponse(text: String) extends Response {
+case class SayResponse(text: String) extends BotResponse {
   override def toString = s"Say(text=$text)"
 }
 
-case class StatusResponse(text: String) extends Response {
+case class StatusResponse(text: String) extends BotResponse {
   override def toString = s"Status(text=$text)"
 }
 
-case class MarkCellResponse(position: Position = Position(0,0), color: String = "#8888ff") extends Response {
+case class MarkCellResponse(position: Position = Position(0,0), color: String = "#8888ff") extends BotResponse {
   override def toString = s"MarkCell(position=$position,color=$color)"
 }
 
-case class LogResponse(text: String) extends Response {
+case class LogResponse(text: String) extends BotResponse {
   override def toString = s"Log(text=$text)"
 }

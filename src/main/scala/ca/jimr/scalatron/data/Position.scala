@@ -21,7 +21,7 @@ case class Position(x: Int, y: Int) {
 }
 
 object Position {
-  def apply(input: String) = {
+  def apply(input: String): Position = {
     val parts = input.split(':')
     Position(parts(0).toInt, parts(1).toInt)
   }
