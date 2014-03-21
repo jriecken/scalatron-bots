@@ -3,23 +3,34 @@ package ca.jimr.scalatron.data
 /*
  * Bot's current view of things
  */
-
 case class BotView(state: String) {
-  private val size = math.sqrt(state.length).toInt
-  private val center = Position(size / 2, size / 2)
-  def apply(rel: Position) = entityAtRelative(rel)
+  def apply(rel: Position) = entityRelative(rel)
 
-  def entityAtRelative(rel: Position) = entityAt(center + rel)
+  def entityRelative(rel: Position) = entityAt(center + rel)
 
   def entityAt(pos: Position) = Entity(state.charAt(posToIndex(pos)))
 
-  def entitiesOfType(entType: Entity) = {
+  def entities(entType: Entity) = {
     state.view.zipWithIndex.filter { case (ch, _) =>
       ch == entType.character
     }.map { case (_, idx) =>
       relativize(indexToPos(idx))
     }
   }
+
+  def closestEntity(entType: Entity) = {
+    entities(entType).sortBy(_.length).headOption
+  }
+
+  def shortestDirectionTo(pos: Position) = {
+    // TODO: implement pathfinding
+    North
+  }
+
+  // TODO: Finish Impl
+
+  private val size = math.sqrt(state.length).toInt
+  private val center = Position(size / 2, size / 2)
 
   private def relativize(pos: Position) = pos - center
 
@@ -33,6 +44,4 @@ case class BotView(state: String) {
     }
     size * pos.y + pos.x
   }
-
-  // TODO: Finish Impl
 }

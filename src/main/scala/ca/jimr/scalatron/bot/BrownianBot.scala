@@ -10,7 +10,7 @@ class BrownianBot extends Bot {
     case ReactCommand(generation, name, time, view, energy, slaves, master, collision, state) =>
       if (energy > 0) {
         Random.shuffle(Direction.All).
-          map { dir => (dir, view.entityAtRelative(dir.toPosition)) }.
+          map { dir => (dir, view.entityRelative(dir.toPosition)) }.
           find { case (_, entity) => !entity.isInstanceOf[Evil] }.
           map { case (dir, _) =>
           Seq(MoveResponse(direction = dir), StatusResponse("Moving...")) ++ (if (time % 100 == 0) Seq(SayResponse("Hmm...")) else Seq())
