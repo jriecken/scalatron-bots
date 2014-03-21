@@ -10,7 +10,7 @@ case class WelcomeCommand(
   name: String,
   apocalypse: Int,
   round: Int,
-  maxslaves: Int
+  maxslaves: Option[Int] = None
 ) extends ServerCommand
 
 case class ReactCommand(
@@ -19,7 +19,7 @@ case class ReactCommand(
   time: Int,
   view: BotView,
   energy: Int,
-  slaves: Int,
+  slaves: Int = 0,
   master: Option[Direction] = None,
   collision: Option[Direction] = None,
   state: Map[String,String] = Map()
@@ -29,7 +29,6 @@ case class GoodbyeCommand(energy: Int) extends ServerCommand
 
 object ServerCommand {
   def apply(input: String) = {
-    println(input)
     val tokens = input.split('(')
     val op = tokens(0)
     val params = tokens(1).dropRight(1).
@@ -41,7 +40,7 @@ object ServerCommand {
         name = params("name"),
         apocalypse = params("apocalypse").toInt,
         round = params("round").toInt,
-        maxslaves = params("maxslaves").toInt
+        maxslaves = params.get("maxslaves").map(_.toInt)
       )
       case "Goodbye" => GoodbyeCommand(energy = params("energy").toInt)
       case "React" => ReactCommand(
@@ -50,7 +49,7 @@ object ServerCommand {
         time = params("time").toInt,
         view = BotView(params("view")),
         energy = params("energy").toInt,
-        slaves = params("slaves").toInt,
+        slaves = params.get("slaves").map(_.toInt).getOrElse(0),
         master = params.get("master").map(s => Direction(Position(s))),
         collision = params.get("collision").map(s => Direction(Position(s))),
         state = params -- Seq("generation", "name", "time", "view", "energy", "slaves", "master", "collision")

@@ -41,8 +41,11 @@ abstract class Bot {
     state("round").toInt
   }
 
+  /**
+   * If this returns None, can make infinite slaves
+   */
   protected def maxslaves(state: Map[String, String]) = {
-    state("maxslaves").toInt
+    state.get("maxslaves").map(_.toInt)
   }
 
 

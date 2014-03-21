@@ -13,7 +13,7 @@ class ServerCommandTest extends WordSpec with ShouldMatchers {
 
     "parse a Welcome command" in {
       val cmd = ServerCommand("Welcome(name=Bot,apocalypse=1000,round=1,maxslaves=5)")
-      cmd should equal(WelcomeCommand(name = "Bot", apocalypse = 1000, round = 1, maxslaves = 5))
+      cmd should equal(WelcomeCommand(name = "Bot", apocalypse = 1000, round = 1, maxslaves = Some(5)))
     }
 
     "parse a React command with no master/collection/params" in {
