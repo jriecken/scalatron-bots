@@ -29,7 +29,7 @@ case class BotView(state: String) {
 
   private def posToIndex(pos: Position) = {
     if (pos.x < 0 || pos.y < 0 || pos.x > size || pos.y > size) {
-      throw new IllegalArgumentException(s"Invalid position: $pos")
+      throw new IllegalArgumentException("Invalid position: "+pos)
     }
     size * pos.y + pos.x
   }

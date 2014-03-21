@@ -1,8 +1,9 @@
 package ca.jimr.scalatron.data
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.WordSpec
+import org.scalatest.matchers.ShouldMatchers
 
-class DirectionTest extends WordSpec with Matchers {
+class DirectionTest extends WordSpec with ShouldMatchers {
   "toPosition" must {
     "handle North" in {
       NorthWest.toPosition should equal(Position(-1, -1))

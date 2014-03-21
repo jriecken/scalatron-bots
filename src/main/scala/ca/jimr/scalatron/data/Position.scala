@@ -5,7 +5,7 @@ package ca.jimr.scalatron.data
  */
 
 case class Position(x: Int, y: Int) {
-  override def toString = s"$x:$y"
+  override def toString = x+":"+y
 
   def +(other: Position) = {
     copy(x = x + other.x, y = y + other.y)

@@ -1,8 +1,9 @@
 package ca.jimr.scalatron.data
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.WordSpec
+import org.scalatest.matchers.ShouldMatchers
 
-class EntityTest extends WordSpec with Matchers {
+class EntityTest extends WordSpec with ShouldMatchers {
   "apply" must {
     "throw an exception if an unknown char is passed in" in {
       intercept[IllegalArgumentException] {

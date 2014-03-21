@@ -29,6 +29,7 @@ case class GoodbyeCommand(energy: Int) extends ServerCommand
 
 object ServerCommand {
   def apply(input: String) = {
+    println(input)
     val tokens = input.split('(')
     val op = tokens(0)
     val params = tokens(1).dropRight(1).
@@ -54,7 +55,7 @@ object ServerCommand {
         collision = params.get("collision").map(s => Direction(Position(s))),
         state = params -- Seq("generation", "name", "time", "view", "energy", "slaves", "master", "collision")
       )
-      case _ => throw new IllegalArgumentException(s"Invalid command: $input")
+      case _ => throw new IllegalArgumentException("Invalid command: "+input)
     }
   }
 }

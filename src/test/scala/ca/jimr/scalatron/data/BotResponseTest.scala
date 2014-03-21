@@ -1,8 +1,9 @@
 package ca.jimr.scalatron.data
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.WordSpec
+import org.scalatest.matchers.ShouldMatchers
 
-class BotResponseTest extends WordSpec with Matchers {
+class BotResponseTest extends WordSpec with ShouldMatchers {
   "MoveResponse" must {
     "stringify" in {
       MoveResponse(direction = North).toString should equal("Move(direction=0:-1)")

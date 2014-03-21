@@ -1,8 +1,9 @@
 package ca.jimr.scalatron.data
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.WordSpec
+import org.scalatest.matchers.ShouldMatchers
 
-class ServerCommandTest extends WordSpec with Matchers {
+class ServerCommandTest extends WordSpec with ShouldMatchers {
   "apply" must {
     "throw an error if an unknown command is passed in" in {
       intercept[IllegalArgumentException] {

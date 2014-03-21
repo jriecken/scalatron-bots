@@ -16,11 +16,11 @@ abstract class Bot {
   final def respondInternal(input: String): String = {
     val res = ServerCommand(input) match {
       case wc @ WelcomeCommand(name, apocalypse, round, maxslaves) =>
-        val welcomResp = Seq(SetResponse(Map("apocalypse" -> apocalypse.toString, "round" -> round.toString, "maxslaves" -> maxslaves.toString)))
+        val welcomeResp = Seq(SetResponse(Map("apocalypse" -> apocalypse.toString, "round" -> round.toString, "maxslaves" -> maxslaves.toString)))
         if (respond.isDefinedAt(wc)) {
-          respond(wc) ++ welcomResp
+          respond(wc) ++ welcomeResp
         } else {
-          welcomResp
+          welcomeResp
         }
       case rc: ReactCommand => respond(rc)
       case gb: GoodbyeCommand =>

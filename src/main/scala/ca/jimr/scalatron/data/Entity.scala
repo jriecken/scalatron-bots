@@ -40,6 +40,6 @@ object Entity {
     case 'p' => Toxifera
     case 'B' => Fluppet
     case 'b' => Snorg
-    case _ => throw new IllegalArgumentException(s"Invalid entity type")
+    case _ => throw new IllegalArgumentException("Invalid entity type")
   }
 }

@@ -8,7 +8,7 @@ package ca.jimr.scalatron.data
 
 sealed trait BotResponse {
   protected def toParamStr(params: Map[String,String])  = {
-    params.toSeq.map { case (k, v) => s"$k=$v" }.mkString(",")
+    params.toSeq.map { case (k, v) => k+"="+v }.mkString(",")
   }
 }
 
@@ -17,7 +17,7 @@ sealed trait BotResponse {
  */
 
 case class MoveResponse(direction: Direction) extends BotResponse {
-  override def toString = s"Move(direction=$direction)"
+  override def toString = "Move(direction="+direction+")"
 }
 
 case class SpawnResponse(
@@ -31,16 +31,16 @@ case class SpawnResponse(
       name.map(n => Map("name" -> n)).getOrElse(Map()) ++
       energy.map(e => Map("energy" -> e.toString)).getOrElse(Map()) ++
       state
-    s"Spawn(${toParamStr(paramMap)})"
+    "Spawn("+toParamStr(paramMap)+")"
   }
 }
 
 case class SetResponse(state: Map[String,String]) extends BotResponse {
-  override def toString = s"Set(${toParamStr(state)})"
+  override def toString = "Set("+toParamStr(state)+")"
 }
 
 case class ExplodeResponse(size: Int) extends BotResponse {
-  override def toString = s"Explode(size=$size)"
+  override def toString = "Explode(size="+size+")"
 }
 
 /*
@@ -48,17 +48,17 @@ case class ExplodeResponse(size: Int) extends BotResponse {
  */
 
 case class SayResponse(text: String) extends BotResponse {
-  override def toString = s"Say(text=$text)"
+  override def toString = "Say(text="+text+")"
 }
 
 case class StatusResponse(text: String) extends BotResponse {
-  override def toString = s"Status(text=$text)"
+  override def toString = "Status(text="+text+")"
 }
 
 case class MarkCellResponse(position: Position = Position(0,0), color: String = "#8888ff") extends BotResponse {
-  override def toString = s"MarkCell(position=$position,color=$color)"
+  override def toString = "MarkCell(position="+position+",color="+color+")"
 }
 
 case class LogResponse(text: String) extends BotResponse {
-  override def toString = s"Log(text=$text)"
+  override def toString = "Log(text="+text+")"
 }
