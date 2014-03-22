@@ -4,30 +4,30 @@ package ca.jimr.scalatron.data
  * All the game entities
  */
 
-abstract class Entity(val character: Char, val travelCost: Int)
+abstract class Entity(val character: Char, val travelCost: Int) {
+  import Entity._
 
-sealed trait Bot
-sealed trait Plant
-sealed trait Animal
-sealed trait Good
-sealed trait Evil
-
-case object Unknown extends Entity('?', 1000)
-case object Empty extends Entity('_', 100)
-case object Wall extends Entity('W', 1000000) with Evil
-
-case object Me extends Entity('M', 1000000) with Bot with Good
-case object MiniMe extends Entity('S', 1000000) with Bot with Good
-case object Enemy extends Entity('m', 1000000) with Bot with Evil
-case object MiniEnemy extends Entity('s', 1000000) with Bot with Evil
-
-case object Zugar extends Entity('P', 0) with Plant with Good
-case object Toxifera extends Entity('p', 1000000) with Plant with Evil
-
-case object Fluppet extends Entity('B', 10) with Animal with Good
-case object Snorg extends Entity('b', 1000000) with Animal with Evil
+  def isEdible: Boolean = this == Zugar || this == Fluppet
+  def isEnemy: Boolean = this == Enemy || this == MiniEnemy
+  def isEvil: Boolean = isEnemy || this == Toxifera || this == Snorg || this == Wall
+}
 
 object Entity {
+  case object Unknown extends Entity('?', 1000)
+  case object Empty extends Entity('_', 100)
+  case object Wall extends Entity('W', 1000000)
+
+  case object Me extends Entity('M', 1000000)
+  case object MiniMe extends Entity('S', 1000000)
+  case object Enemy extends Entity('m', 1000000)
+  case object MiniEnemy extends Entity('s', 1000000)
+
+  case object Zugar extends Entity('P', 0)
+  case object Toxifera extends Entity('p', 1000000)
+
+  case object Fluppet extends Entity('B', 10)
+  case object Snorg extends Entity('b', 1000000)
+
   def apply(input: Char) = input match {
     case '?' => Unknown
     case '_' => Empty

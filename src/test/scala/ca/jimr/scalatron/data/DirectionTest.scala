@@ -1,5 +1,6 @@
 package ca.jimr.scalatron.data
 
+import ca.jimr.scalatron.data.Direction._
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 

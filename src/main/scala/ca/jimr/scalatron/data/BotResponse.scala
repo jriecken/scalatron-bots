@@ -12,53 +12,55 @@ sealed trait BotResponse {
   }
 }
 
-/*
- * Responses that affect server state
- */
+object BotResponse {
+  /*
+   * Responses that affect server state
+   */
 
-case class MoveResponse(direction: Direction) extends BotResponse {
-  override def toString = "Move(direction="+direction+")"
-}
-
-case class SpawnResponse(
-  direction: Direction,
-  name: Option[String] = None,
-  energy: Option[Int] = None,
-  state: Map[String,String] = Map()
-) extends BotResponse {
-  override def toString = {
-    val paramMap = Map("direction" -> direction.toString) ++
-      name.map(n => Map("name" -> n)).getOrElse(Map()) ++
-      energy.map(e => Map("energy" -> e.toString)).getOrElse(Map()) ++
-      state
-    "Spawn("+toParamStr(paramMap)+")"
+  case class Move(direction: Direction) extends BotResponse {
+    override def toString = "Move(direction="+direction+")"
   }
-}
 
-case class SetResponse(state: Map[String,String]) extends BotResponse {
-  override def toString = "Set("+toParamStr(state)+")"
-}
+  case class Spawn(direction: Direction, name: Option[String] = None,
+                   energy: Option[Int] = None, state: Map[String,String] = Map()
+  ) extends BotResponse {
+    override def toString = {
+      val paramMap = Map("direction" -> direction.toString) ++
+        name.map(n => Map("name" -> n)).getOrElse(Map()) ++
+        energy.map(e => Map("energy" -> e.toString)).getOrElse(Map()) ++
+        state
+      "Spawn("+toParamStr(paramMap)+")"
+    }
+  }
 
-case class ExplodeResponse(size: Int) extends BotResponse {
-  override def toString = "Explode(size="+size+")"
-}
+  /**
+   * Note: To remove state - set the state to the empty string
+   */
+  case class SetState(state: Map[String,String]) extends BotResponse {
+    override def toString = "Set("+toParamStr(state)+")"
+  }
 
-/*
- * Responses that do not affect server state
- */
+  case class Explode(size: Int) extends BotResponse {
+    override def toString = "Explode(size="+size+")"
+  }
 
-case class SayResponse(text: String) extends BotResponse {
-  override def toString = "Say(text="+text+")"
-}
+  /*
+   * Responses that do not affect server state
+   */
 
-case class StatusResponse(text: String) extends BotResponse {
-  override def toString = "Status(text="+text+")"
-}
+  case class Say(text: String) extends BotResponse {
+    override def toString = "Say(text="+text+")"
+  }
 
-case class MarkCellResponse(position: Position = Position(0,0), color: String = "#8888ff") extends BotResponse {
-  override def toString = "MarkCell(position="+position+",color="+color+")"
-}
+  case class Status(text: String) extends BotResponse {
+    override def toString = "Status(text="+text+")"
+  }
 
-case class LogResponse(text: String) extends BotResponse {
-  override def toString = "Log(text="+text+")"
+  case class MarkCell(position: Position = Position(0,0), color: String = "#8888ff") extends BotResponse {
+    override def toString = "MarkCell(position="+position+",color="+color+")"
+  }
+
+  case class Log(text: String) extends BotResponse {
+    override def toString = "Log(text="+text+")"
+  }
 }

@@ -1,28 +1,37 @@
 package ca.jimr.scalatron.data
 
+import ca.jimr.scalatron.data.Direction._
+
 /*
  * Bot's current view of things
  */
 case class BotView(state: String) {
+  lazy val entities = {
+    state.map(Entity(_)).zipWithIndex.map { case (e, idx) => (e, relativize(indexToPos(idx)))}
+  }
+
   def apply(rel: Position) = entityRelative(rel)
 
   def entityRelative(rel: Position) = entityAt(center + rel)
 
-  def entityAt(pos: Position) = Entity(state.charAt(posToIndex(pos)))
-
-  def entities(entType: Entity) = {
-    state.view.zipWithIndex.filter { case (ch, _) =>
-      ch == entType.character
-    }.map { case (_, idx) =>
-      relativize(indexToPos(idx))
-    }
+  def entityAt(pos: Position) = {
+    val (e, _) = entities(posToIndex(pos))
+    e
   }
 
-  def closestEntity(entType: Entity) = {
-    entities(entType).sortBy(_.length).headOption
+  def filterEntities(filter: (Entity) => Boolean) = {
+    entities.filter { case (e, _) => filter(e) }
   }
 
-  def shortestDirectionTo(pos: Position) = {
+  def closestPosition(positions: Seq[Position]) = {
+    positions.sortBy(_.length).headOption
+  }
+
+  def directionTo(pos: Position) = {
+    Direction(pos)
+  }
+
+  def shortestPathDirectionTo(pos: Position) = {
     // TODO: implement pathfinding
     North
   }

@@ -7,6 +7,8 @@ import scala.util.Random
  */
 
 trait Direction {
+  import Direction._
+
   def toPosition = this match {
     case NorthWest => Position(-1, -1)
     case North => Position(0, -1)
@@ -23,16 +25,16 @@ trait Direction {
   }
 }
 
-case object NorthWest extends Direction
-case object North extends Direction
-case object NorthEast extends Direction
-case object East extends Direction
-case object SouthEast extends Direction
-case object South extends Direction
-case object SouthWest extends Direction
-case object West extends  Direction
-
 object Direction {
+  case object NorthWest extends Direction
+  case object North extends Direction
+  case object NorthEast extends Direction
+  case object East extends Direction
+  case object SouthEast extends Direction
+  case object South extends Direction
+  case object SouthWest extends Direction
+  case object West extends Direction
+
   def apply(pos: Position) = (pos.x.signum, pos.y.signum) match {
     case (-1,-1) => NorthWest
     case (0, -1) => North
