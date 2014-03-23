@@ -9,6 +9,7 @@ abstract class Entity(val character: Char, val travelCost: Int) {
 
   def isEdible: Boolean = this == Zugar || this == Fluppet
   def isEnemy: Boolean = this == Enemy || this == MiniEnemy
+  def isAttackable: Boolean = isEnemy || this == Snorg
   def isEvil: Boolean = isEnemy || this == Toxifera || this == Snorg || this == Wall
 }
 

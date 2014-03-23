@@ -50,8 +50,8 @@ object ServerCommand {
         view = BotView(params("view")),
         energy = params("energy").toInt,
         slaves = params.get("slaves").map(_.toInt).getOrElse(0),
-        master = params.get("master").map(s => Direction(Position(s))),
-        collision = params.get("collision").map(s => Direction(Position(s))),
+        master = params.get("master").map(s => Direction(s)),
+        collision = params.get("collision").map(s => Direction(s)),
         state = params -- Seq("generation", "name", "time", "view", "energy", "slaves", "master", "collision")
       )
       case _ => throw new IllegalArgumentException("Invalid command: "+input)

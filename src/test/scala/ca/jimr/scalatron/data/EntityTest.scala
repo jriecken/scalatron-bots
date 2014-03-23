@@ -37,6 +37,22 @@ class EntityTest extends WordSpec with ShouldMatchers {
     }
   }
 
+  "isAttackable" must {
+    "work" in {
+      Unknown.isAttackable should equal(false)
+      Empty.isAttackable should equal(false)
+      Wall.isAttackable should equal(false)
+      Me.isAttackable should equal(false)
+      MiniMe.isAttackable should equal(false)
+      Enemy.isAttackable should equal(true)
+      MiniEnemy.isAttackable should equal(true)
+      Zugar.isAttackable should equal(false)
+      Toxifera.isAttackable should equal(false)
+      Fluppet.isAttackable should equal(false)
+      Snorg.isAttackable should equal(true)
+    }
+  }
+
   "isEvil" must {
     "work" in {
       Unknown.isEvil should equal(false)

@@ -15,7 +15,7 @@ case class Position(x: Int, y: Int) {
     copy(x = x - other.y, y = y - other.y)
   }
 
-  def length = math.sqrt(x * x + y * y)
+  def length = math.sqrt(x * x + y * y).toInt
 
   // TODO: Finish impl
 }

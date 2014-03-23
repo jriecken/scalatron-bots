@@ -18,8 +18,16 @@ class DirectionTest extends WordSpec with ShouldMatchers {
     }
   }
 
+  "reflect" must {
+    "work" in {
+      North.reflect should equal(South)
+      East.reflect should equal(West)
+    }
+  }
+
   "apply" must {
     "work" in {
+      Direction("0:1") should equal(South)
       Direction(Position(-5,-10)) should equal(NorthWest)
       Direction(Position(0, -7)) should equal(North)
       Direction(Position(4, -90)) should equal(NorthEast)

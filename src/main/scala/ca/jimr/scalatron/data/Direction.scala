@@ -9,6 +9,11 @@ import scala.util.Random
 trait Direction {
   import Direction._
 
+  def reflect = {
+    val p = toPosition
+    Direction(Position(-p.x, -p.y))
+  }
+
   def toPosition = this match {
     case NorthWest => Position(-1, -1)
     case North => Position(0, -1)
@@ -35,7 +40,9 @@ object Direction {
   case object SouthWest extends Direction
   case object West extends Direction
 
-  def apply(pos: Position) = (pos.x.signum, pos.y.signum) match {
+  def apply(input: String): Direction = apply(Position(input))
+
+  def apply(pos: Position): Direction = (pos.x.signum, pos.y.signum) match {
     case (-1,-1) => NorthWest
     case (0, -1) => North
     case (1, -1) => NorthEast
@@ -47,7 +54,7 @@ object Direction {
     case _ => throw new IllegalArgumentException("Invalid direction")
   }
 
-  def random = All(Random.nextInt(8))
+  def random: Direction = All(Random.nextInt(8))
 
   val All = Vector(NorthWest, North, NorthEast, East, SouthEast, South, SouthWest, West)
 }

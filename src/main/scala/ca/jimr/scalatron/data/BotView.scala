@@ -23,6 +23,10 @@ case class BotView(state: String) {
     entities.filter { case (e, _) => filter(e) }
   }
 
+  def filterEntitiesPos(filter: (Entity) => Boolean) = {
+    filterEntities(filter).map { case (_, pos) => pos }
+  }
+
   def closestPosition(positions: Seq[Position]) = {
     positions.sortBy(_.length).headOption
   }
