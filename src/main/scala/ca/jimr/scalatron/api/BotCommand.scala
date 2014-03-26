@@ -31,11 +31,20 @@ object BotCommand {
     }
   }
 
-  /**
-   * Note: To remove state - set the state to the empty string
-   */
-  case class SetState(state: Map[String,String]) extends BotCommand {
+  case class SetState(state: Map[String,String] = Map()) extends BotCommand {
     override def toString = "Set("+toParamStr(state)+")"
+
+    def merge(newState: Map[String,String]): SetState = {
+      copy(state = state ++ newState)
+    }
+
+    def add(key: String, value: String): SetState = {
+      copy(state = state + (key -> value))
+    }
+
+    def remove(key: String): SetState = {
+      copy(state = state + (key -> ""))
+    }
   }
 
   case class Explode(size: Int) extends BotCommand {
@@ -58,7 +67,11 @@ object BotCommand {
     override def toString = "MarkCell(position="+position+",color="+color+")"
   }
 
-  case class Log(text: String) extends BotCommand {
+  case class Log(text: String = "") extends BotCommand {
     override def toString = "Log(text="+text+")"
+
+    def append(msg: String): Log = {
+      copy(text = text + "\n" + msg)
+    }
   }
 }

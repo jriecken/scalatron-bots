@@ -1,8 +1,8 @@
 package ca.jimr.scalatron.bot
 
-import ca.jimr.scalatron.api._
 import ca.jimr.scalatron.api.BotCommand._
 import ca.jimr.scalatron.api.ServerCommand._
+import ca.jimr.scalatron.api._
 import scala.util.Random
 
 class BrownianBot extends Bot {
@@ -11,22 +11,24 @@ class BrownianBot extends Bot {
       (r.generation, r.state.get("type").getOrElse("master")) match {
         case (0, "master") => controlMaster(r)
         case (1, "missile") => controlMissile(r)
-        case _ => List() // Unknown bot
+        case _ => BotResponse() // Unknown bot
       }
   }
 
-  def controlMaster(cmd: React): List[BotCommand] = {
-    moveMaster(cmd.view, cmd.state) ++
+  def controlMaster(cmd: React) = {
+    BotResponse().merge(
+      moveMaster(cmd.view, cmd.state),
       attackMaster(cmd.view, cmd.state, cmd.time, cmd.energy)
+    ).withStatus("Brownie")
   }
 
-  def controlMissile(cmd: React): List[BotCommand] = {
+  def controlMissile(cmd: React) = {
     val view = cmd.view
     val targets = view.filterEntitiesPos(_.isAttackable)
     view.closestPosition(targets).flatMap { pos =>
       val distance = pos.length
       if (distance <= 2) {
-        Some(List(Say("Boom"),Explode(size = 5)))
+        Some(BotResponse().withSay("Boom").withExplode(5))
       } else {
         None
       }
@@ -37,7 +39,7 @@ class BrownianBot extends Bot {
 
   def seekEnemy(view: BotView, targets: Seq[Position], state: Map[String,String]) = {
     val target = view.closestPosition(targets).getOrElse(Position(state("target")))
-    List(Move(Direction(target)))
+    BotResponse().withMove(Direction(target))
   }
 
   def attackMaster(view: BotView, state: Map[String,String], time: Int, energyLeft: Int) = {
@@ -48,24 +50,23 @@ class BrownianBot extends Bot {
       val actualPower = if (energyLeft >= idealPower) idealPower else 100
       if ((time - lastMissileFired) > 10 && energyLeft >= actualPower) {
         // Pew pew
-        Some(List(
-          SetState(Map(
-            "lastMissileFired" -> time.toString
-          )),
-          Spawn(
+        Some(
+          BotResponse().
+          withState("lastMissileFired", time.toString).
+          withSpawn(Spawn(
             direction = Direction(target),
             energy = Some(actualPower),
             state = Map(
               "type" -> "missile",
               "target" -> target.toString
             )
-          )
-        ))
+          ))
+        )
       } else {
         // Not enough power
         None
       }
-    }.getOrElse(List())
+    }.getOrElse(BotResponse())
   }
 
   def moveMaster(view: BotView, state: Map[String,String]) = {
@@ -90,7 +91,7 @@ class BrownianBot extends Bot {
         if (view.entityRelative(dir.toPosition).isEvil) {
           None
         } else {
-          Some(List(Move(dir), SetState(Map("moveDir" -> dir.toString))))
+          Some(BotResponse().withMove(dir).withState("moveDir", dir.toString))
         }
 //    }
     }.orElse {
@@ -100,17 +101,17 @@ class BrownianBot extends Bot {
           val entityNext = view.entityRelative(dir.toPosition)
           if (entityNext == Entity.Empty || entityNext.isEdible) {
             // Continue moving in the direction we're moving in
-            Some(List(Move(dir)))
+            Some(BotResponse().withMove(dir))
           } else {
             None
           }
       }
     }.orElse {
       // Otherwise move in a random direction and remember that direction
-      randomOkDirection(view).map(d => List(Move(d), SetState(Map("moveDir" -> d.toString))))
+      randomOkDirection(view).map(d => BotResponse().withMove(d).withState("moveDir", d.toString))
     }.getOrElse {
       // Trapped
-      List()
+      BotResponse()
     }
   }
 

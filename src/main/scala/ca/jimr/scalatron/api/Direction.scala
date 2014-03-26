@@ -7,6 +7,7 @@ import scala.util.Random
  */
 
 trait Direction {
+
   import Direction._
 
   def reflect = {

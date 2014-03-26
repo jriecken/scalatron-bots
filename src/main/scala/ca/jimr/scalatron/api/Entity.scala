@@ -5,6 +5,7 @@ package ca.jimr.scalatron.api
  */
 
 abstract class Entity(val character: Char, val travelCost: Int) {
+
   import Entity._
 
   def isEdible: Boolean = this == Zugar || this == Fluppet

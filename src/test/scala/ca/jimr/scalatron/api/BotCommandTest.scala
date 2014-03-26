@@ -1,7 +1,7 @@
 package ca.jimr.scalatron.api
 
-import ca.jimr.scalatron.api.Direction._
 import ca.jimr.scalatron.api.BotCommand._
+import ca.jimr.scalatron.api.Direction._
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 
@@ -27,6 +27,24 @@ class BotCommandTest extends WordSpec with ShouldMatchers {
     "stringify" in {
       val resp = SetState(state = Map("custom1" -> "value1", "custom2" -> "value2"))
       resp.toString should equal("Set(custom1=value1,custom2=value2)")
+    }
+
+    "merge" in {
+      val resp = SetState(state = Map("custom1" -> "value1", "custom2" -> "value2"))
+      val merged = resp.merge(Map("custom2" -> "newCustom2", "custom3" -> "value3"))
+      merged.toString should equal("Set(custom1=value1,custom2=newCustom2,custom3=value3)")
+    }
+
+    "add" in {
+      val resp = SetState(state = Map("custom1" -> "value1", "custom2" -> "value2"))
+      val added = resp.add("custom3", "value3")
+      added.toString should equal("Set(custom1=value1,custom2=value2,custom3=value3)")
+    }
+
+    "remove" in {
+      val resp = SetState(state = Map("custom1" -> "value1", "custom2" -> "value2"))
+      val removed = resp.remove("custom2")
+      removed.toString should equal("Set(custom1=value1,custom2=)")
     }
   }
 
@@ -57,6 +75,10 @@ class BotCommandTest extends WordSpec with ShouldMatchers {
   "Log" must {
     "stringify" in {
       Log(text = "Hello World").toString should equal("Log(text=Hello World)")
+    }
+
+    "append" in {
+      Log(text = "Hello World").append("Hello Again").toString should equal("Log(text=Hello World\nHello Again)")
     }
   }
 }
