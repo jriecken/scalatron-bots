@@ -1,8 +1,8 @@
 package ca.jimr.scalatron.bot
 
-import ca.jimr.scalatron.data._
-import ca.jimr.scalatron.data.BotResponse._
-import ca.jimr.scalatron.data.ServerCommand._
+import ca.jimr.scalatron.api._
+import ca.jimr.scalatron.api.BotCommand._
+import ca.jimr.scalatron.api.ServerCommand._
 import scala.util.Random
 
 class BrownianBot extends Bot {
@@ -15,12 +15,12 @@ class BrownianBot extends Bot {
       }
   }
 
-  def controlMaster(cmd: React): List[BotResponse] = {
+  def controlMaster(cmd: React): List[BotCommand] = {
     moveMaster(cmd.view, cmd.state) ++
       attackMaster(cmd.view, cmd.state, cmd.time, cmd.energy)
   }
 
-  def controlMissile(cmd: React): List[BotResponse] = {
+  def controlMissile(cmd: React): List[BotCommand] = {
     val view = cmd.view
     val targets = view.filterEntitiesPos(_.isAttackable)
     view.closestPosition(targets).flatMap { pos =>

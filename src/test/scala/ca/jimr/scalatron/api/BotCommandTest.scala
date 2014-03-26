@@ -1,11 +1,11 @@
-package ca.jimr.scalatron.data
+package ca.jimr.scalatron.api
 
-import ca.jimr.scalatron.data.Direction._
-import ca.jimr.scalatron.data.BotResponse._
+import ca.jimr.scalatron.api.Direction._
+import ca.jimr.scalatron.api.BotCommand._
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 
-class BotResponseTest extends WordSpec with ShouldMatchers {
+class BotCommandTest extends WordSpec with ShouldMatchers {
   "Move" must {
     "stringify" in {
       Move(direction = North).toString should equal("Move(direction=0:-1)")

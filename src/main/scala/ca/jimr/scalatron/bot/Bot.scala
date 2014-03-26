@@ -1,8 +1,8 @@
 package ca.jimr.scalatron.bot
 
-import ca.jimr.scalatron.data._
-import ca.jimr.scalatron.data.BotResponse._
-import ca.jimr.scalatron.data.ServerCommand._
+import ca.jimr.scalatron.api._
+import ca.jimr.scalatron.api.BotCommand._
+import ca.jimr.scalatron.api.ServerCommand._
 
 /**
  * Base bot class - All bot impls must extend this.
@@ -13,7 +13,7 @@ abstract class Bot {
   /**
    * Implement this. Only need to handle ReactCommand. The others are optional and handled for you.
    */
-  def respond: PartialFunction[ServerCommand, List[BotResponse]]
+  def respond: PartialFunction[ServerCommand, List[BotCommand]]
 
   final def respondInternal(input: String): String = {
     try {

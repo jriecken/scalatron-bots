@@ -1,4 +1,4 @@
-package ca.jimr.scalatron.data
+package ca.jimr.scalatron.api
 
 import scala.util.Random
 

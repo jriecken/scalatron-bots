@@ -1,6 +1,6 @@
-package ca.jimr.scalatron.data
+package ca.jimr.scalatron.api
 
-import ca.jimr.scalatron.data.Direction._
+import ca.jimr.scalatron.api.Direction._
 
 /*
  * Bot's current view of things

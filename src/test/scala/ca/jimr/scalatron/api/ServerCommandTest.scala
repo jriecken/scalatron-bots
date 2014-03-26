@@ -1,7 +1,7 @@
-package ca.jimr.scalatron.data
+package ca.jimr.scalatron.api
 
-import ca.jimr.scalatron.data.Direction._
-import ca.jimr.scalatron.data.ServerCommand._
+import ca.jimr.scalatron.api.Direction._
+import ca.jimr.scalatron.api.ServerCommand._
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 

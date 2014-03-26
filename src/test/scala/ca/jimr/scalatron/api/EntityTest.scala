@@ -1,6 +1,6 @@
-package ca.jimr.scalatron.data
+package ca.jimr.scalatron.api
 
-import ca.jimr.scalatron.data.Entity._
+import ca.jimr.scalatron.api.Entity._
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 
