@@ -21,7 +21,7 @@ object ServerCommand {
     view: BotView,
     energy: Int,
     slaves: Int = 0,
-    master: Option[Direction] = None,
+    master: Option[Position] = None,
     collision: Option[Direction] = None,
     state: Map[String,String] = Map()
   ) extends ServerCommand
@@ -50,7 +50,7 @@ object ServerCommand {
         view = BotView(params("view")),
         energy = params("energy").toInt,
         slaves = params.get("slaves").map(_.toInt).getOrElse(0),
-        master = params.get("master").map(s => Direction(s)),
+        master = params.get("master").map(s => Position(s)),
         collision = params.get("collision").map(s => Direction(s)),
         state = params -- Seq("generation", "name", "time", "view", "energy", "slaves", "master", "collision")
       )

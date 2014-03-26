@@ -35,11 +35,6 @@ case class BotView(state: String) {
     Direction(pos)
   }
 
-  def shortestPathDirectionTo(pos: Position) = {
-    // TODO: implement pathfinding
-    North
-  }
-
   // TODO: Finish Impl
 
   private val size = math.sqrt(state.length).toInt

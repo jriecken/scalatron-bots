@@ -24,8 +24,8 @@ class ServerCommandTest extends WordSpec with ShouldMatchers {
     }
 
     "parse a React command with master/collection/params" in {
-      val cmd = ServerCommand("React(generation=1,name=Bot1,time=1,view=____M____,energy=100,slaves=0,master=1:0,collision=0:-1,custom1=value1,custom2=value2)")
-      cmd should equal(React(generation = 1, name = "Bot1", time = 1, view = BotView("____M____"), energy = 100, slaves = 0, master = Some(East), collision = Some(North), state = Map("custom1" -> "value1", "custom2" -> "value2")))
+      val cmd = ServerCommand("React(generation=1,name=Bot1,time=1,view=____M____,energy=100,slaves=0,master=5:0,collision=0:-1,custom1=value1,custom2=value2)")
+      cmd should equal(React(generation = 1, name = "Bot1", time = 1, view = BotView("____M____"), energy = 100, slaves = 0, master = Some(Position(5, 0)), collision = Some(North), state = Map("custom1" -> "value1", "custom2" -> "value2")))
     }
 
     "parse a Goodbye command" in {

@@ -1,6 +1,4 @@
-package ca.jimr.scalatron.bot
-
-import ca.jimr.scalatron.api._
+package ca.jimr.scalatron.api
 
 /**
  * Base bot trait. All bots must mix this in in order to be executable

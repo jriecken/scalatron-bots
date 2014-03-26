@@ -16,6 +16,7 @@ case class Position(x: Int, y: Int) {
   }
 
   def length = math.sqrt(x * x + y * y).toInt
+  def steps = math.abs(x) + math.abs(y)
 
   // TODO: Finish impl
 }

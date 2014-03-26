@@ -5,7 +5,7 @@ import ca.jimr.scalatron.api.ServerCommand._
 import ca.jimr.scalatron.api._
 import scala.util.Random
 
-class BrownianBot extends Bot {
+object BrownianBot extends Bot {
   def respond = {
     case r: React =>
       (r.generation, r.state.get("type").getOrElse("master")) match {
@@ -24,13 +24,18 @@ class BrownianBot extends Bot {
 
   def controlMissile(cmd: React) = {
     val view = cmd.view
-    val targets = view.filterEntitiesPos(_.isAttackable)
+    val targets = view.filterEntitiesPos(_.isEnemy)
     view.closestPosition(targets).flatMap { pos =>
-      val distance = pos.length
-      if (distance <= 2) {
-        Some(BotResponse().withSay("Boom").withExplode(5))
+      val entity = view(pos)
+      if (entity == Entity.MiniEnemy) {
+        Some(seekEnemy(view, Seq(pos), cmd.state))
       } else {
-        None
+        val distance = pos.length
+        if (distance <= 2) {
+          Some(BotResponse().withSay("Boom").withExplode(4))
+        } else {
+          None
+        }
       }
     }.getOrElse {
       seekEnemy(view, targets, cmd.state)
@@ -44,18 +49,16 @@ class BrownianBot extends Bot {
 
   def attackMaster(view: BotView, state: Map[String,String], time: Int, energyLeft: Int) = {
     val targets = view.filterEntitiesPos(_.isEnemy)
-    val lastMissileFired = state.get("lastMissileFired").map(_.toInt).getOrElse(0)
+    val dontFireUntil = state.get("dontFireUntil").map(_.toInt).getOrElse(0)
     view.closestPosition(targets).flatMap { target =>
-      val idealPower = 100 + target.length // Payload + Fuel to get there
-      val actualPower = if (energyLeft >= idealPower) idealPower else 100
-      if ((time - lastMissileFired) > 10 && energyLeft >= actualPower) {
+      if (time > dontFireUntil && energyLeft > 100) {
         // Pew pew
         Some(
           BotResponse().
-          withState("lastMissileFired", time.toString).
+          withState("dontFireUntil", (time + target.steps).toString).
           withSpawn(Spawn(
             direction = Direction(target),
-            energy = Some(actualPower),
+            energy = Some(100),
             state = Map(
               "type" -> "missile",
               "target" -> target.toString
