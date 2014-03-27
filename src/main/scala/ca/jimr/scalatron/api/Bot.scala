@@ -7,11 +7,11 @@ trait Bot {
   /**
    * Implement this. All the commands are technically optional, but React should always be handled.
    */
-  def respond: PartialFunction[ServerCommand, BotResponse]
+  def respond: PartialFunction[(ServerCommand, BotResponse), BotResponse]
 
   final def executeCommand(input: String): String = {
     try {
-      respond.orElse(emptyResponse)(ServerCommand(input)).toString
+      respond.orElse(emptyResponse)(ServerCommand(input), BotResponse()).toString
     } catch {
       case e: Exception =>
         e.printStackTrace()
@@ -19,7 +19,7 @@ trait Bot {
     }
   }
 
-  private def emptyResponse: PartialFunction[ServerCommand, BotResponse] = {
+  private def emptyResponse: PartialFunction[(ServerCommand, BotResponse), BotResponse] = {
     case _ => BotResponse()
   }
 }

@@ -24,6 +24,10 @@ case class BotResponse(cmds: Map[String, BotCommand] = Map()) {
     }
   }
 
+  def ++(other: BotResponse): BotResponse = {
+    merge(other)
+  }
+
   def withMove(direction: Direction): BotResponse = {
     copy(cmds + ("Move" -> Move(direction)))
   }

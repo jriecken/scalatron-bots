@@ -4,6 +4,7 @@ import ca.jimr.scalatron.bot._
 
 class ControlFunctionFactory {
   def create: (String => String) = {
-    BrownianBot.executeCommand
+    //BrownianBot.executeCommand
+    MistakeNotBot.executeCommand
   }
 }

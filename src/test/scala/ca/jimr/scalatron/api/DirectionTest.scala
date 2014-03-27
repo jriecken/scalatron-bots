@@ -18,24 +18,28 @@ class DirectionTest extends WordSpec with ShouldMatchers {
     }
   }
 
-  "reflect" must {
-    "work" in {
-      North.reflect should equal(South)
-      East.reflect should equal(West)
-    }
-  }
-
   "apply" must {
     "work" in {
       Direction("0:1") should equal(South)
-      Direction(Position(-5,-10)) should equal(NorthWest)
-      Direction(Position(0, -7)) should equal(North)
-      Direction(Position(4, -90)) should equal(NorthEast)
-      Direction(Position(7, 0)) should equal(East)
-      Direction(Position(2, 9)) should equal(SouthEast)
+      Direction(Position(-10, -1)) should equal(West)
+      Direction(Position(-1, -10)) should equal(North)
+      Direction(Position(-1, -1)) should equal(NorthWest)
+      Direction(Position(-10, 0)) should equal(West)
+      Direction(Position(-10, 1)) should equal(West)
+      Direction(Position(-1, 10)) should equal(South)
+      Direction(Position(-1, 1)) should equal(SouthWest)
       Direction(Position(0, 10)) should equal(South)
-      Direction(Position(-100, 4)) should equal(SouthWest)
-      Direction(Position(-12, 0)) should equal(West)
+      Direction(Position(0, -10)) should equal(North)
+      Direction(Position(10, -1)) should equal(East)
+      Direction(Position(1, -10)) should equal(North)
+      Direction(Position(1, -1)) should equal(NorthEast)
+      Direction(Position(10, 0)) should equal(East)
+      Direction(Position(10, 1)) should equal(East)
+      Direction(Position(1, 10)) should equal(South)
+      Direction(Position(1, 1)) should equal(SouthEast)
+      intercept[IllegalArgumentException] {
+        Direction(Position(0,0))
+      }
     }
   }
 }

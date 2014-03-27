@@ -7,6 +7,7 @@ import ca.jimr.scalatron.api.Direction._
  */
 case class BotView(state: String) {
   lazy val entities = {
+    // Convert the state characters into entities with their relative position to the center
     state.map(Entity(_)).zipWithIndex.map { case (e, idx) => (e, relativize(indexToPos(idx)))}
   }
 
@@ -35,12 +36,10 @@ case class BotView(state: String) {
     Direction(pos)
   }
 
-  // TODO: Finish Impl
+  val size = math.sqrt(state.length).toInt
+  val center = Position(size / 2, size / 2)
 
-  private val size = math.sqrt(state.length).toInt
-  private val center = Position(size / 2, size / 2)
-
-  private def relativize(pos: Position) = pos - center
+  def relativize(pos: Position) = pos - center
 
   private def indexToPos(index: Int) = {
     Position(index % size, index / size)

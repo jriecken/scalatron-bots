@@ -19,6 +19,13 @@ class BotResponseTest extends WordSpec with ShouldMatchers {
       val merged = BotResponse().merge(resp, resp2)
       merged.cmds should equal(Map("Set" -> SetState(Map("one" -> "value", "two" -> "newValue", "three" -> "value")), "Log" -> Log("One\nTwo")))
     }
+
+    "merge with ++" in {
+      val resp = BotResponse().withState("one", "value")
+      val resp2  = BotResponse().withMove(Direction.North)
+      val merged = resp ++ resp2
+      merged.cmds should equal(Map("Set" -> SetState(Map("one" -> "value")), "Move" -> Move(Direction.North)))
+    }
   }
 
   "withMove" must {

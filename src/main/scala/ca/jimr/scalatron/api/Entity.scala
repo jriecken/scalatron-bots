@@ -4,31 +4,23 @@ package ca.jimr.scalatron.api
  * All the game entities
  */
 
-abstract class Entity(val character: Char, val travelCost: Int) {
-
-  import Entity._
-
-  def isEdible: Boolean = this == Zugar || this == Fluppet
-  def isEnemy: Boolean = this == Enemy || this == MiniEnemy
-  def isAttackable: Boolean = isEnemy || this == Snorg
-  def isEvil: Boolean = isEnemy || this == Toxifera || this == Snorg || this == Wall
-}
+abstract class Entity(val character: Char)
 
 object Entity {
-  case object Unknown extends Entity('?', 1000)
-  case object Empty extends Entity('_', 100)
-  case object Wall extends Entity('W', 1000000)
+  case object Unknown extends Entity('?')
+  case object Empty extends Entity('_')
+  case object Wall extends Entity('W')
 
-  case object Me extends Entity('M', 1000000)
-  case object MiniMe extends Entity('S', 1000000)
-  case object Enemy extends Entity('m', 1000000)
-  case object MiniEnemy extends Entity('s', 1000000)
+  case object Me extends Entity('M')
+  case object MiniMe extends Entity('S')
+  case object Enemy extends Entity('m')
+  case object MiniEnemy extends Entity('s')
 
-  case object Zugar extends Entity('P', 0)
-  case object Toxifera extends Entity('p', 1000000)
+  case object Zugar extends Entity('P')
+  case object Toxifera extends Entity('p')
 
-  case object Fluppet extends Entity('B', 10)
-  case object Snorg extends Entity('b', 1000000)
+  case object Fluppet extends Entity('B')
+  case object Snorg extends Entity('b')
 
   def apply(input: Char) = input match {
     case '?' => Unknown

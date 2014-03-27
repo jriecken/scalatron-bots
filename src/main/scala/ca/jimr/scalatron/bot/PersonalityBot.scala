@@ -9,9 +9,9 @@ trait PersonalityBot extends Bot {
   val personalities: Map[String, Bot]
 
   override def respond = {
-    case r: React =>
-      val personality = r.state.get("personality").getOrElse(initialPersonality)
-      personalities.get(personality).map(_.respond(r)).getOrElse(BotResponse())
+    case (cmd: React, resp: BotResponse) =>
+      val personality = cmd.state.get("personality").getOrElse(initialPersonality)
+      personalities.get(personality).map(_.respond(cmd, resp)).getOrElse(BotResponse())
   }
 }
 

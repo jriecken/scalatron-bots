@@ -15,10 +15,8 @@ case class Position(x: Int, y: Int) {
     copy(x = x - other.y, y = y - other.y)
   }
 
-  def length = math.sqrt(x * x + y * y).toInt
-  def steps = math.abs(x) + math.abs(y)
-
-  // TODO: Finish impl
+  def length = math.sqrt(x * x + y * y)
+  def steps = math.abs(x).max(math.abs(y))
 }
 
 object Position {

@@ -1,6 +1,7 @@
 package ca.jimr.scalatron.api
 
 import scala.util.Random
+import java.net.NoRouteToHostException
 
 /*
  * Cardinal directions
@@ -9,11 +10,6 @@ import scala.util.Random
 trait Direction {
 
   import Direction._
-
-  def reflect = {
-    val p = toPosition
-    Direction(Position(-p.x, -p.y))
-  }
 
   def toPosition = this match {
     case NorthWest => Position(-1, -1)
@@ -43,16 +39,27 @@ object Direction {
 
   def apply(input: String): Direction = apply(Position(input))
 
-  def apply(pos: Position): Direction = (pos.x.signum, pos.y.signum) match {
-    case (-1,-1) => NorthWest
-    case (0, -1) => North
-    case (1, -1) => NorthEast
-    case (1, 0) => East
-    case (1, 1) => SouthEast
-    case (0, 1) => South
-    case (-1, 1) => SouthWest
-    case (-1, 0) => West
-    case _ => throw new IllegalArgumentException("Invalid direction")
+  def apply(pos: Position): Direction = {
+    val Position(x, y) = pos
+    (x.signum, y.signum) match {
+      case (-1, -1) if x < y * 3 => West
+      case (-1, -1) if y < x * 3 => North
+      case (-1, -1) => NorthWest
+      case (-1, 0) => West
+      case (-1, 1) if -x > y * 3 => West
+      case (-1, 1) if y > -x * 3 => South
+      case (-1, 1) => SouthWest
+      case (0, 1) => South
+      case (0, -1) => North
+      case (1, -1) if x > -y * 3 => East
+      case (1, -1) if -y > x * 3 => North
+      case (1, -1) => NorthEast
+      case (1, 0) => East
+      case (1, 1) if x > y * 3 => East
+      case (1, 1) if y > x * 3 => South
+      case (1, 1) => SouthEast
+      case _ => throw new IllegalArgumentException("Invalid direction")
+    }
   }
 
   def random: Direction = All(Random.nextInt(8))
