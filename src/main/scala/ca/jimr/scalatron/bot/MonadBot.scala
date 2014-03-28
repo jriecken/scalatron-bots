@@ -3,11 +3,9 @@ package ca.jimr.scalatron.bot
 import ca.jimr.scalatron.bot.personalities._
 
 /**
- * Mistake Not... (My Current State Of Joshing Gentle Peevishness For The Awesome And Terrible
- * Majesty Of The Towering Seas Of Ire That Are Themselves The Milquetoast Shallows Fringing
- * My Vast Oceans Of Wrath)
+ * M.O.N.A.D. - Might Overkill Nearly All Droids
  */
-object MistakeNotBot extends PersonalityBot {
+object MonadBot extends PersonalityBot {
   val initialPersonality = "Master"
   val personalities = Map(
     "Master" -> Master,

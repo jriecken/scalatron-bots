@@ -1,6 +1,5 @@
 package ca.jimr.scalatron.api
 
-import ca.jimr.scalatron.api.Direction._
 
 /*
  * Bot's current view of things
@@ -30,10 +29,6 @@ case class BotView(state: String) {
 
   def closestPosition(positions: Seq[Position]) = {
     positions.sortBy(_.length).headOption
-  }
-
-  def directionTo(pos: Position) = {
-    Direction(pos)
   }
 
   val size = math.sqrt(state.length).toInt

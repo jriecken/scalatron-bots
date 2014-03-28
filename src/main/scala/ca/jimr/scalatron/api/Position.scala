@@ -7,6 +7,10 @@ package ca.jimr.scalatron.api
 case class Position(x: Int, y: Int) {
   override def toString = x+":"+y
 
+  def reverse = {
+    copy(-x, -y)
+  }
+
   def +(other: Position) = {
     copy(x = x + other.x, y = y + other.y)
   }

@@ -1,8 +1,9 @@
 package ca.jimr.scalatron.bot.personalities
 
-import ca.jimr.scalatron.api._
 import ca.jimr.scalatron.api.BotCommand._
+import ca.jimr.scalatron.api.Entity._
 import ca.jimr.scalatron.api.ServerCommand._
+import ca.jimr.scalatron.api._
 import ca.jimr.scalatron.bot.PersonalityBot._
 
 /**
@@ -10,13 +11,21 @@ import ca.jimr.scalatron.bot.PersonalityBot._
  *
  * - Sits in one spot unless
  *   - Enemy master comes within view => becomes OffensiveMissile
- *   - Enemy slave comes within 2 units => becomes DefensiveMissile
- *   - Snorg gets withing 5 units => starts evading snorg (but still looks for enemies)
+ *   - Enemy slave comes within 3 units => becomes DefensiveMissile
  */
 object IdleMissile extends Bot with CommonBehavior {
   def respond = {
     case (cmd: React, resp: BotResponse)  =>
-      resp.withStatus("IdleMissile")
+      val view = cmd.view
+      val enemyMaster = view.filterEntitiesPos(_ == Enemy)
+      val enemySlave = view.closestPosition(view.filterEntitiesPos(_ == MiniEnemy))
+      if (enemyMaster.nonEmpty) {
+        resp.withNewPersonality("OffensiveMissile").withState("target", enemyMaster(0).toString())
+      } else if (enemySlave.isDefined && enemySlave.get.steps < 4) {
+        resp.withNewPersonality("DefensiveMissile").withState("target", enemySlave.get.toString())
+      } else {
+        resp
+      }
   }
 
   class IdleMissileBotResponse(resp: BotResponse) {

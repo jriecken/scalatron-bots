@@ -6,44 +6,51 @@ import ca.jimr.scalatron.api.Entity._
 import scala.util.Random
 
 trait CommonBehavior {
-  def explore(implicit cmd: React): BotResponse = {
+  def explore(resp: BotResponse)(implicit cmd: React): BotResponse = {
     cmd.state.get("exploreDirection").map(d => Direction(d)).flatMap { dir =>
       if (okToMoveInDirection(dir)) {
-        Some(BotResponse().withMove(dir))
+        Some(resp.withMove(dir))
       } else {
         None
       }
     }.orElse {
-      randomOkDirection.map(d => BotResponse().withMove(d).withState("exploreDirection", d.toString))
+      randomOkDirection().map(d => resp.withMove(d).withState("exploreDirection", d.toString))
     }.getOrElse {
-      BotResponse()
+      resp
     }
   }
 
-  def moveTowards(rel: Position)(implicit cmd: React): Direction = {
+  def directionTowardsClosest(test: (Entity) => Boolean, avoidMaster: Boolean = false)(implicit cmd: React): Option[Direction] = {
+    cmd.view.closestPosition(cmd.view.filterEntitiesPos(test)).
+      flatMap(directionTowards(_, avoidMaster)).
+      orElse(randomOkDirection(avoidMaster))
+  }
+
+  def directionTowards(rel: Position, avoidMaster: Boolean = false)(implicit cmd: React): Option[Direction] = {
     val dir = Direction(rel)
-    if (okToMoveInDirection(dir)) {
-      dir
+    if (okToMoveInDirection(dir, avoidMaster)) {
+      Some(dir)
     } else {
-      val dirNoX = Direction(Position(0, rel.y))
-      val dirNoY = Direction(Position(rel.x, 0))
-      if (okToMoveInDirection(dirNoX)) {
-        dirNoX
-      } else if (okToMoveInDirection(dirNoY)) {
-        dirNoY
+      if (rel.y != 0 && okToMoveInDirection(Direction(Position(0, rel.y)), avoidMaster)) {
+        Some(Direction(Position(0, rel.y)))
+      } else if (rel.x != 0 && okToMoveInDirection(Direction(Position(rel.x, 0)), avoidMaster)) {
+        Some(Direction(Position(rel.x, 0)))
       } else {
-        // Not really any choice but to collide with something
-        dir
+        None
       }
     }
   }
 
-  def randomOkDirection(implicit cmd: React): Option[Direction] = {
-    Random.shuffle(Direction.All).find(okToMoveInDirection)
+  def randomDirection(implicit cmd: React): Direction = {
+    Random.shuffle(Direction.All).head
   }
 
-  def okToMoveInDirection(dir: Direction)(implicit cmd: React): Boolean = {
+  def randomOkDirection(avoidMaster: Boolean = false)(implicit cmd: React): Option[Direction] = {
+    Random.shuffle(Direction.All).find(okToMoveInDirection(_, avoidMaster))
+  }
+
+  def okToMoveInDirection(dir: Direction, avoidMaster: Boolean = false)(implicit cmd: React): Boolean = {
     val adjEntity = cmd.view.entityRelative(dir.toPosition)
-    adjEntity != Wall && adjEntity != Toxifera && adjEntity != Snorg
+    adjEntity != Wall && adjEntity != Toxifera && adjEntity != Snorg && (!avoidMaster || adjEntity != Me)
   }
 }
