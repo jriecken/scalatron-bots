@@ -15,10 +15,10 @@ import ca.jimr.scalatron.bot.personalities.OffensiveMissile._
 object Master extends Bot with CommonBehavior {
   object Constants {
     val InitialHarvesterOffset = 0
-    val HarvesterLaunchInterval = 100
-    val HarvestingPeriod = 50
+    val HarvesterLaunchInterval = 5
+    val HarvestingPeriod = 100
     val HarvesterEnergy = 100
-    val MasterIdleAfterLaunchHarvester = 5
+    val MasterIdleAfterLaunchHarvester = -1
 
     val OffensiveMissileEnergy = 200
     val DefensiveMissileEnergy = 100
@@ -33,9 +33,9 @@ object Master extends Bot with CommonBehavior {
       implicit val c = cmd
       Seq(
         fireDefensiveMissile _,
-        fireOffensiveMissile _,
-        launchHarvester _,
+        //fireOffensiveMissile _, // Temporarily turning this off as offense < getting food
         //dropMine _, // Temporarily turning off mine laying as it doesn't seem to be helping...
+        launchHarvester _,
         moveInAppealingDirection _
       ).foldLeft(resp) { (resp, fn) =>
         resp ++ fn(resp)
