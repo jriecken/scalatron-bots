@@ -1,8 +1,8 @@
 package ca.jimr.scalatron.bot
 
-import ca.jimr.scalatron.api._
 import ca.jimr.scalatron.api.BotCommand._
 import ca.jimr.scalatron.api.ServerCommand._
+import ca.jimr.scalatron.api._
 
 trait PersonalityBot extends Bot {
   val initialPersonality: String
@@ -11,7 +11,15 @@ trait PersonalityBot extends Bot {
   override def respond = {
     case (cmd: React, resp: BotResponse) =>
       val personality = cmd.state.get("personality").getOrElse(initialPersonality)
-      personalities.get(personality).map(_.respond(cmd, resp)).getOrElse(BotResponse())
+      personalities.get(personality).map(_.respond(cmd, resp)).getOrElse(resp)
+    case (cmd: ServerCommand, resp: BotResponse) =>
+      personalities.get(initialPersonality).flatMap { p =>
+        if (p.respond.isDefinedAt(cmd, resp)) {
+          Some(p.respond(cmd, resp))
+        } else {
+          None
+        }
+      }.getOrElse(resp)
   }
 }
 

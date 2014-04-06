@@ -1,7 +1,6 @@
 package ca.jimr.scalatron.bot.personalities
 
 import ca.jimr.scalatron.api.BotCommand._
-import ca.jimr.scalatron.api.Entity._
 import ca.jimr.scalatron.api.ServerCommand._
 import ca.jimr.scalatron.api._
 import ca.jimr.scalatron.bot.PersonalityBot._
@@ -17,8 +16,8 @@ object IdleMissile extends Bot with CommonBehavior {
   def respond = {
     case (cmd: React, resp: BotResponse)  =>
       val view = cmd.view
-      val enemyMaster = view.filterEntitiesPos(_ == Enemy)
-      val enemySlave = view.closestPosition(view.filterEntitiesPos(_ == MiniEnemy))
+      val enemyMaster = view.filterEntitiesPos(Entity.isEnemyMaster)
+      val enemySlave = view.closestPosition(view.filterEntitiesPos(Entity.isEnemyMini))
       if (enemyMaster.nonEmpty) {
         resp.withNewPersonality("OffensiveMissile").withState("target", enemyMaster(0).toString())
       } else if (enemySlave.isDefined && enemySlave.get.steps < 4) {

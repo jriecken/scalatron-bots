@@ -36,4 +36,12 @@ object Entity {
     case 'b' => Snorg
     case _ => throw new IllegalArgumentException("Invalid entity type")
   }
+
+  // Filter operations
+
+  def isMeMaster(e: Entity) = e == Me
+  def isEnemyMaster(e: Entity) = e == Enemy
+  def isEnemyMini(e: Entity) = e == MiniEnemy
+  def isFood(e: Entity) = e == Fluppet || e == Zugar
+
 }

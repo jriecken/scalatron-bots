@@ -1,7 +1,6 @@
 package ca.jimr.scalatron.bot.personalities
 
 import ca.jimr.scalatron.api.BotCommand._
-import ca.jimr.scalatron.api.Entity._
 import ca.jimr.scalatron.api.ServerCommand._
 import ca.jimr.scalatron.api._
 import ca.jimr.scalatron.bot.PersonalityBot._
@@ -22,7 +21,7 @@ object OffensiveMissile extends Bot with CommonBehavior {
       val view = cmd.view
       val target = Position(cmd.state("target"))
       val seenEnemy = cmd.state.get("seenEnemy").exists(_.toBoolean)
-      val enemyPosition = view.filterEntitiesPos(_ == Enemy).headOption
+      val enemyPosition = view.filterEntitiesPos(Entity.isEnemyMaster).headOption
       enemyPosition.flatMap { pos =>
         if (pos.steps < 2) {
           Some(resp.withExplode(4))
@@ -33,7 +32,7 @@ object OffensiveMissile extends Bot with CommonBehavior {
           )))
         }
       }.orElse {
-        if (seenEnemy && view.filterEntitiesPos(_ == MiniEnemy).nonEmpty) {
+        if (seenEnemy && view.filterEntitiesPos(Entity.isEnemyMini).nonEmpty) {
           Some(resp.withoutState("seenEnemy").withNewPersonality("DefensiveMissile"))
         } else {
           if (target == Position(0, 0)) {
