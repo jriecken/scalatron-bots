@@ -14,7 +14,7 @@ import ca.jimr.scalatron.bot.personalities.OffensiveMissile._
  */
 object Master extends Bot with CommonBehavior {
   object Constants {
-    val HarvestingMinPeriod = 100
+    val HarvestingMinPeriod = 200
     val HarvesterEnergy = 100
 
     val OffensiveMissileEnergy = 200
