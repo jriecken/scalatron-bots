@@ -10,6 +10,12 @@ import ca.jimr.scalatron.bot.PersonalityBot._
  * after which it will start move back to the master and transfer energy back
  */
 object Harvester extends Bot with CommonBehavior {
+  object Constants {
+    val Period = 50
+    val GoHomePeriod = 75
+    val MaxEnergy = 2000
+  }
+
   def respond = {
     case (cmd: React, resp: BotResponse)  =>
       implicit val c = cmd
@@ -22,14 +28,19 @@ object Harvester extends Bot with CommonBehavior {
 
   def harvest(resp: BotResponse)(implicit cmd: React) = {
     val time = cmd.time
-    val harvestMinLength = cmd.state("harvestMinLength").toInt
+    val stopHarvestAtTime = cmd.state("stopHarvestAtTime").toInt
+    val stopHarvestAtEnergy = cmd.state("stopHarvestAtEnergy").toInt
     val endTime = cmd.state("endTime").toInt
-    if (time > (endTime - 100)) {
+    if (time > (endTime - 150)) {
       goHome(resp)
-    } else if (time < harvestMinLength) {
-      findFood(resp, avoidMaster = true)
+    } else if (time < stopHarvestAtTime && cmd.energy < stopHarvestAtEnergy) {
+      findFood(resp)
     } else {
-      findFood(resp, preferMaster = true)
+      if (time - stopHarvestAtTime < Constants.GoHomePeriod) {
+        goHome(resp)
+      } else {
+        findFood(resp).withState("stopHarvestingAtTime", (time + Constants.Period).toString)
+      }
     }
   }
 
@@ -38,12 +49,13 @@ object Harvester extends Bot with CommonBehavior {
   }
 
   class HarvesterBotResponse(resp: BotResponse) {
-    def spawnHarvester(direction: Direction, harvestMinLength: Int, energy: Option[Int] = None)(implicit cmd: React) = {
+    def spawnHarvester(direction: Direction, energy: Option[Int] = None)(implicit cmd: React) = {
       resp.spawnWithPersonality("Harvester", Spawn(
         direction = direction,
         energy = energy,
         state = Map(
-          "harvestMinLength" -> harvestMinLength.toString,
+          "stopHarvestAtTime" -> (cmd.time + Constants.Period).toString,
+          "stopHarvestAtEnergy" -> Constants.MaxEnergy.toString,
           "endTime" -> cmd.state.get("endTime").getOrElse(DefaultEndTime.toString)
         )
       ))

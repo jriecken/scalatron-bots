@@ -14,7 +14,6 @@ import ca.jimr.scalatron.bot.personalities.OffensiveMissile._
  */
 object Master extends Bot with CommonBehavior {
   object Constants {
-    val HarvestingMinPeriod = 200
     val HarvesterEnergy = 100
 
     val OffensiveMissileEnergy = 200
@@ -48,7 +47,7 @@ object Master extends Bot with CommonBehavior {
     if (cmd.time < (endTime - 100) && !resp.cmds.contains("Spawn")) {
       val okLaunchDirection = randomOkDirection()
       if (cmd.energy > Constants.HarvesterEnergy && okLaunchDirection.isDefined) {
-        resp.spawnHarvester(okLaunchDirection.get, cmd.time + Constants.HarvestingMinPeriod, Some(Constants.HarvesterEnergy))
+        resp.spawnHarvester(okLaunchDirection.get, Some(Constants.HarvesterEnergy))
       } else {
         resp
       }
